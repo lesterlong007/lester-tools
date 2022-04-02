@@ -19,4 +19,4 @@ export { lazyLoadImg } from './image/image';
 export { supportLazy } from './image/image';
 export { b64toBlob } from './image/image';
 export { copyBase64Img } from './image/image';
-// export { getDeviceType } from './base/base';
+export { getDeviceType } from './base/base';
