@@ -3,12 +3,12 @@
  * @author Lester
  * @date 2022-01-12 11:22
  */
-import qs from 'qs';
+// import qs from 'qs';
 
 /**
  * 获取屏幕宽度
  */
-export const getClientWidth = () : number => {
+export const getClientWidth = (): number => {
   const docBody = document.body;
   const docEl: HTMLElement = document.documentElement;
   return docBody.clientWidth || docEl.clientWidth || window.innerWidth || 375;
@@ -92,6 +92,21 @@ export const setTitle = (tile: string) => {
 };
 
 /**
+ * 解析url参数
+ * @param searchStr
+ */
+export const parseSearch = (searchStr = window.location.search) => {
+  const qmIndex = searchStr.indexOf('?');
+  const paramArr = (qmIndex > -1 ? searchStr.slice(qmIndex + 1) : searchStr).split('&');
+  const params: { [key: string]: string } = {};
+  paramArr.forEach((val: string) => {
+    const valArr = val.split('=');
+    params[valArr[0]] = valArr[1];
+  });
+  return params;
+};
+
+/**
  * 获取路由query参数
  * @param key
  */
@@ -100,14 +115,12 @@ export const getQueryParam = (key?: string) => {
   const hashIndex: number = hash.indexOf('?');
   let param: any = {};
   if (hashIndex > -1) {
-    param = {
-      ...qs.parse(hash.slice(hashIndex), { ignoreQueryPrefix: true })
-    };
+    param = parseSearch(hash.slice(hashIndex));
   }
   if (search) {
     param = {
       ...param,
-      ...qs.parse(search, { ignoreQueryPrefix: true })
+      ...parseSearch(search)
     };
   }
 
@@ -143,43 +156,10 @@ export const getRandomStr = (): string => {
 };
 
 /**
- * 下载图片
- * @param url
- * @param name
- */
-export const downloadImage = (url: string, name: string): void => {
-  const hrefEle = document.createElement('a');
-  hrefEle.href = url;
-  hrefEle.download = name;
-  // hrefEle.setAttribute('download', name);
-  hrefEle.click();
-};
-
-/**
- * base64转Blob
- * @param b64Url
- * @param contentType
- * @param sliceSize
- */
-export const b64toBlob = (b64Url: string, contentType = 'image/png', sliceSize = 512): Blob => {
-  const byteCharacters: string = window.atob(b64Url.split(',')[1]);
-  const byteArrays: any[] = [];
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-  return new Blob(byteArrays, { type: contentType });
-};
-
-/**
  * 获取设备类型
  * @param userAgent
  */
+/*
 export const getDeviceType = (userAgent: string): string => {
   const agentStr = userAgent || window.navigator.userAgent.toLowerCase();
   if (/windows/.test(agentStr)) {
@@ -196,3 +176,4 @@ export const getDeviceType = (userAgent: string): string => {
     return 'others';
   }
 };
+*/
