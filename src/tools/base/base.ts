@@ -159,7 +159,7 @@ export const getRandomStr = (): string => {
  * 获取设备类型
  * @param userAgent
  */
-export const getDeviceType = (userAgent: string): string => {
+export const getDeviceType = (userAgent?: string): string => {
   const agentStr = userAgent || window.navigator.userAgent.toLowerCase();
   if (/windows/.test(agentStr)) {
     return 'windows';
