@@ -120,13 +120,13 @@ export const getQueryParam = (key?: string) => {
 /**
  * 是否是移动端
  */
-export const isMobile: () => boolean = () => /Android|webOS|iPhone|iPod|BlackBerry/i.test(window.navigator.userAgent);
+export const isMobile = (): boolean => /Android|webOS|iPhone|iPod|BlackBerry/i.test(window.navigator.userAgent);
 
 /**
  * 获取cookie
  * @param key
  */
-export const getCookie: (key: string) => string = (key: string) => {
+export const getCookie = (key: string): string => {
   if (!document.cookie || !window.navigator.cookieEnabled) {
     return '';
   }
@@ -138,6 +138,61 @@ export const getCookie: (key: string) => string = (key: string) => {
 /**
  * 获取随机字符串
  */
-export const getRandomStr: () => string = () => {
+export const getRandomStr = (): string => {
   return Math.random().toString(36).slice(2);
+};
+
+/**
+ * 下载图片
+ * @param url
+ * @param name
+ */
+export const downloadImage = (url: string, name: string): void => {
+  const hrefEle = document.createElement('a');
+  hrefEle.href = url;
+  hrefEle.download = name;
+  // hrefEle.setAttribute('download', name);
+  hrefEle.click();
+};
+
+/**
+ * base64转Blob
+ * @param b64Url
+ * @param contentType
+ * @param sliceSize
+ */
+export const b64toBlob = (b64Url: string, contentType = 'image/png', sliceSize = 512): Blob => {
+  const byteCharacters: string = window.atob(b64Url.split(',')[1]);
+  const byteArrays: any[] = [];
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+  return new Blob(byteArrays, { type: contentType });
+};
+
+/**
+ * 获取设备类型
+ * @param userAgent
+ */
+export const getDeviceType = (userAgent: string): string => {
+  const agentStr = userAgent || window.navigator.userAgent.toLowerCase();
+  if (/windows/.test(agentStr)) {
+    return 'windows';
+  } else if (/iphone|ipod/.test(agentStr)) {
+    return 'ios';
+  } else if (/ipad/.test(agentStr)) {
+    return 'ipad';
+  } else if (/android/.test(agentStr)) {
+    return 'android';
+  } else if (/mac/.test(agentStr)) {
+    return 'mac';
+  } else {
+    return 'others';
+  }
 };
