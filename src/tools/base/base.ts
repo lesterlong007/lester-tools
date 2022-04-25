@@ -58,7 +58,7 @@ export const Toast = {
  * @param showTip
  */
 export const copy = (text: string, showTip = true) => {
-  const ele = document.createElement('input');
+  const ele = document.createElement('textarea');
   ele.value = text;
   document.body.appendChild(ele);
   ele.select();
